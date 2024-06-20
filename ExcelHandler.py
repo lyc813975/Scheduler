@@ -29,7 +29,6 @@ class ExcelHandler:
         self,
         filename = "sheet.xlsx"
     ):
-        
         self.workbook = None
         self.path = os.getcwd()
         self.filename = filename
