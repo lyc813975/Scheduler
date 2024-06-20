@@ -25,10 +25,14 @@ def get_color_value(color):
     return color.rgb if color.type == "rgb" else color.theme
 
 class ExcelHandler:
-    def __init__(self) -> None:
+    def __init__(
+        self,
+        filename = "sheet.xlsx"
+    ):
+        
         self.workbook = None
         self.path = os.getcwd()
-        self.filename = "sheet.xlsx"
+        self.filename = filename
 
     def load(self, path=None):
         if self.workbook is not None:
