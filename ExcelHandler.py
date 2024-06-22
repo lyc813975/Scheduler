@@ -94,6 +94,20 @@ class ExcelHandler:
 
     def set_cell_value(self, title, row, col, value):
         self.get_cell(title, row, col).value = value
+
+    def get_row_value(self, title, row):
+        max_column = self.get_sheet_max_column(title)
+        values = []
+        for i in range(max_column):
+            values.append(self.get_cell(title, row, i).value)
+        return values
+
+    def get_col_value(self, title, col):
+        max_row = self.get_sheet_max_row(title)
+        values = []
+        for i in range(max_row):
+            values.append(self.get_cell(title, i, col).value)
+        return values
     
     def get_cell_font(self, title, row, col):
         return self.get_cell(title, row, col).font
