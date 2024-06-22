@@ -14,11 +14,9 @@ class ExcelHandler:
         self.path = os.getcwd()
         self.filename = filename
 
-    def load(self, path=None):
+    def load(self):
         if self.workbook is not None:
             print("[Warning]: Discard Current Workbook")
-        if path is not None:
-            self.path, self.filename = os.path.split(path)
         self.workbook = openpyxl.load_workbook(os.path.join(self.path, self.filename))
 
     def create_worksheet(self):
