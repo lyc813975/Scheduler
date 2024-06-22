@@ -3,26 +3,7 @@ import openpyxl
 import openpyxl.cell
 from openpyxl.styles import PatternFill, Border, Side, Alignment, Protection, Font
 from openpyxl.utils.cell import get_column_letter, column_index_from_string
-
-# python: 0-indexed, excel: 1-indexed
-def convert_python_row_to_excel_row(row: int) -> str:
-    return str(row + 1)
-
-def convert_excel_row_to_pythonl_row(row: str) -> int:
-    return int(row) - 1
-
-# python: 0-indexed, excel: A, B, C...
-def convert_python_column_to_excel_column(column: int) -> str:
-    return get_column_letter(column + 1)
-
-def convert_excel_column_to_python_column(column: int) -> str:
-    return column_index_from_string(column) - 1
-
-# color has 2 representations, rgb and theme
-# rgb is aRGB string in hex, while exact value of theme is according to palette of file
-# TODO: convert theme to rgb code
-def get_color_value(color):
-    return color.rgb if color.type == "rgb" else color.theme
+from Util import *
 
 class ExcelHandler:
     def __init__(
