@@ -29,3 +29,10 @@ def fill_merge_cell(values):
         else:
             prev = values[i]
     return values
+
+def root_of_merged_cell(sheet, coord):
+    """ Find the parent of the merged cell by iterating through the range of merged cells """
+    # Note: if there are many merged cells in a large spreadsheet, this may become inefficient
+    for merged in sheet.merged_cells.ranges:
+        if coord in merged:
+            return merged

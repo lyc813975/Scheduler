@@ -1,8 +1,7 @@
 import os
 import openpyxl
 import openpyxl.cell
-from openpyxl.styles import PatternFill, Border, Side, Alignment, Protection, Font
-from openpyxl.utils.cell import get_column_letter, column_index_from_string
+from openpyxl.styles import PatternFill, Border, Side, Alignment, Font
 from Util import *
 
 class ExcelHandler:
@@ -47,13 +46,33 @@ class ExcelHandler:
     def get_sheet_max_column(self, title):
         return self.workbook[title].max_column
 
-    def get_cell(self, title, row, col):
+    def unmerge_cells(self, title, start_row, start_col, end_row, end_col):
+        raise NotImplementedError
+
+    def merge_cells(self, title, start_row, start_col, end_row, end_col):
+        if isinstance(start_row, int):
+            start_row = convert_python_row_to_excel_row(start_row)
+        if isinstance(end_row, int):
+            end_row = convert_python_row_to_excel_row(end_row)
+        if isinstance(start_col, int):
+            start_col = convert_python_column_to_excel_column(start_col)
+        if isinstance(end_col, int):
+            end_col = convert_python_column_to_excel_column(end_col)
+        self.workbook[title].merge_cells(f"{start_col}{start_row}:{end_col}{end_row}")
+
+    def get_cell(self, title, row, col, return_root=True, return_range=False):
         if isinstance(row, int):
             row = convert_python_row_to_excel_row(row)
         if isinstance(col, int):
             col = convert_python_column_to_excel_column(col)
         try:
             cell = self.workbook[title][col+row]
+            merged = None
+            if return_root and isinstance(cell, openpyxl.cell.cell.MergedCell):
+                merged = root_of_merged_cell(self.workbook[title], col+row)
+                cell = self.workbook[title][merged.start_cell.coordinate]
+            if return_range:
+                return cell, merged
             return cell
         except ValueError as e:
             print(e)
@@ -99,6 +118,18 @@ class ExcelHandler:
 
     def set_cell_fill(self, title, row, col, fill):
         self.get_cell(title, row, col).fill = fill
+
+    def get_cell_border(self, title, row, col):
+        return self.get_cell(title, row, col).border
+
+    def set_cell_border(self, title, row, col, border):
+        cell, cellRange = self.get_cell(title, row, col, return_range=True)
+        if cellRange is None:
+            cell.border = border
+        else:
+            for i in range(cellRange.min_row - 1, cellRange.max_row):
+                for j in range(cellRange.min_col - 1, cellRange.max_col):
+                    self.get_cell(title, i, j, return_root=False).border = border
 
     def get_column_width(self, title, col):
         if isinstance(col, int):
@@ -163,6 +194,10 @@ def test_writer():
     writer.set_cell_value(titles[1], 0, 2, "啊")
     writer.set_cell_font(titles[1], 0, 2, Font("新細明體", sz=24, bold=False, italic=False, underline=None, color='00000000'))
 
+    writer.merge_cells(titles[1], 1, 1, 3, 2)
+    writer.set_cell_value(titles[1], 1, 2, "啊")
+    writer.set_cell_border(titles[1], 2, 2, Border(left=Side(style='thin')))
+
     writer.save_worksheet()
 
 
@@ -176,14 +211,21 @@ def test_reader():
     for title in titles:
         for i in range(reader.get_sheet_max_row(title)):
             for j in range(reader.get_sheet_max_column(title)):
-                print(f"Title: {title}, Cell Position: {i, j}")
                 value = reader.get_cell_value(title, i, j)
+                if value is None:
+                    continue
                 fill = reader.get_cell_fill(title, i, j)
                 font = reader.get_cell_font(title, i, j)
+                border = reader.get_cell_border(title, i, j)
                 color = font.color
+                print(f"Title: {title}, Cell Position: {i, j}")
                 print(f"\tValue: {value}, Height: {reader.get_row_height(title, i)}, Width: {reader.get_column_width(title, j)}")
                 print(f"\tFont: {font.name}, Size: {font.size}, Bold: {font.bold}, Italic: {font.italic}, Underline: {font.underline}")
                 print(f"\tText Color: {get_color_value(color)}, Background color: {get_color_value(fill.fgColor)}")
+                print(f"\tLeft: {border.left.style if border.left is not None else border.left}, ", end="")
+                print(f"Right: {border.right.style if border.right is not None else border.right}, ", end="")
+                print(f"Top: {border.top.style if border.top is not None else border.top}, ", end="")
+                print(f"Bottom: {border.bottom.style if border.bottom is not None else border.bottom}")
 
 if __name__ == "__main__":
     test_writer()
