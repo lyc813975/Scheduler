@@ -3,7 +3,7 @@ from collections import defaultdict
 from Util import *
 import copy
 
-class ProducibleConstrains:
+class ProducibleConstraints:
     def __init__(
         self,
         Excel: ExcelHandler
@@ -29,5 +29,10 @@ class ProducibleConstrains:
             products.append(row[2])
             colors.append(row[3])
             particles.append(row[4])
-        print(fill_merge_cell(injectors))
+        print("讀取 labels")
         print(self.labels)
+        print()
+
+        print("讀取射出機欄位")
+        print(fill_merge_cell(injectors))
+        

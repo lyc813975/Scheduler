@@ -21,6 +21,7 @@ def convert_excel_column_to_python_column(column: int) -> str:
 def get_color_value(color):
     return color.rgb if color.type == "rgb" else color.theme
 
+# solve merge_cells problem 
 def fill_merge_cell(values):
     prev = values[0]
     for i in range(1, len(values)):
