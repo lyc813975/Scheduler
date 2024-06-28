@@ -18,5 +18,6 @@ class ColdMoldConstraints:
 
     def load(self):
         self.labels = self.Excel.get_row_value(self.title, self.label_row)
+        # self.type = self.Excel.get_col_value(self.title, 0)
         print(self.labels)
         

@@ -7,6 +7,6 @@ if __name__ == '__main__':
     path = "sample.xlsx"
     Excel = ExcelHandler(path)
     Excel.load()
-    # Producible = ProducibleConstraints(Excel)
+    Producible = ProducibleConstraints(Excel)
     Cold = ColdMoldConstraints(Excel)
     Hot = HotMoldConstraints(Excel)
