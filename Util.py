@@ -30,13 +30,15 @@ def root_of_merged_cell(sheet, coord):
 
 
 # ---------------------------
-table = {"台可": "TAICO",
+table = {
+         "台可": "TAICO",
          "自用胚": "SU",
          "自用(台鹽600)": "SU_TAIYEN_600",
          "自用(台鹽850)": "SU_TAIYEN_850",
          "自用(台鹽1500)": "SU_TAIYEN_1500",
          "統一": "UNI",
-         "自用(金車600)": "SU_KINGCAR_600"}
+         "自用(金車600)": "SU_KINGCAR_600"
+        }
 
 def transform_name(name):
     if name in table.keys():

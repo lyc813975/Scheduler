@@ -55,4 +55,4 @@ class HotMoldConstraints:
         print("HotMoldConstraints")
         print(self.labels)
         print(self.products["MAX-385"].get())
-        
+        print()

@@ -1,7 +1,5 @@
 from ExcelHandler import ExcelHandler
-from collections import defaultdict
 from Util import *
-import copy
 
 class ColdMold:
     def __init__(
