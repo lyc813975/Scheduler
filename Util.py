@@ -21,19 +21,25 @@ def convert_excel_column_to_python_column(column: int) -> str:
 def get_color_value(color):
     return color.rgb if color.type == "rgb" else color.theme
 
-# solve merge_cells problem 
-def fill_merge_cell(values):
-    prev = values[0]
-    for i in range(1, len(values)):
-        if values[i] is None:
-            values[i] = prev
-        else:
-            prev = values[i]
-    return values
-
 def root_of_merged_cell(sheet, coord):
     """ Find the parent of the merged cell by iterating through the range of merged cells """
     # Note: if there are many merged cells in a large spreadsheet, this may become inefficient
     for merged in sheet.merged_cells.ranges:
         if coord in merged:
             return merged
+
+
+# ---------------------------
+table = {"台可": "TAICO",
+         "自用胚": "SU",
+         "自用(台鹽600)": "SU_TAIYEN_600",
+         "自用(台鹽850)": "SU_TAIYEN_850",
+         "自用(台鹽1500)": "SU_TAIYEN_1500",
+         "統一": "UNI",
+         "自用(金車600)": "SU_KINGCAR_600"}
+
+def transform_name(name):
+    if name in table.keys():
+        return table[name]
+    else:
+        return name

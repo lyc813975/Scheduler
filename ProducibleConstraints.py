@@ -8,10 +8,12 @@ class Injector:
         name,
     ):
         self.name = name
-        self.items = defaultdict(list)
+        self.items = defaultdict(dict)
     
     def add(self, item_name, color, particle, customer):
-        self.items[item_name] = [color, particle, customer]
+        self.items[item_name]["color"] = color
+        self.items[item_name]["particle"] = particle
+        self.items[item_name]["customer"] = transform_name(customer)
 
     def get(self):
         return self.items
@@ -49,9 +51,7 @@ class ProducibleConstraints:
 
             self.injectors[injector_name].add(item, color, particle, customer)
             
-        print("讀取 labels")
+        print("ProducibleConstraints")
         print(self.labels)
+        print(self.injectors["M21"].get())
         print()
-
-        print("讀取射出機欄位")
-        print(self.injectors["M21"].items)        
